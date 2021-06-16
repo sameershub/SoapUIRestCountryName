@@ -1,0 +1,62 @@
+package services;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import entities.Users;
+import repositories.userUpload;
+
+@Service
+public class userUploadService {
+	
+	@Autowired
+	private userUpload userUpld;
+	
+	String line;
+	
+	public void saveUsersData() throws ParseException {
+		
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("src/main/resources/UserUpload.csv"));
+			System.out.println("Hello");
+			while ((line = br.readLine())!=null) {
+				String [] data = line.split(",");
+				Users u = new Users();
+				
+				u.setFirstName(data[0]);
+				u.setLastName(data[1]);
+				u.setMiddleName(data[2]);
+				u.setPassword(data[3]);
+				u.setDescription(data[4]);
+				u.setEmail(data[5]);
+				u.setPhoneNumber(data[6]);
+				u.setStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(data[7]));
+				u.setStatus(data[8]);
+				u.setTimeZoneId(Integer.parseInt(data[9]));
+				u.setUserDepartment(data[10]);
+				u.setUserName(data[11]);
+				u.setUserRoles(data[12]);
+//				u.setEndDate(data[13]);
+				u.setEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(data[13]));
+				
+				userUpld.save(u);
+			}
+			br.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+}

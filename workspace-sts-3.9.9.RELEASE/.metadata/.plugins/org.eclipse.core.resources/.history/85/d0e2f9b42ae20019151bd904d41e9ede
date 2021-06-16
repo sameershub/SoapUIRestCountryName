@@ -1,0 +1,26 @@
+package com.data.upload;
+
+import java.text.ParseException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import services.userUploadService;
+
+@RestController
+public class userController {
+	
+	@Autowired
+	private userUploadService us;
+	
+	@RequestMapping(path="uploadUsers")
+	public void setUserData() {
+		try {
+			us.saveUsersData();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+
+}

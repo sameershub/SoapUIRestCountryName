@@ -1,0 +1,11 @@
+package repositories;
+
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+import entities.Users;
+
+@Repository
+public interface userUpload extends CrudRepository<Users, Integer>{
+
+}

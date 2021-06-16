@@ -1,0 +1,25 @@
+package controller;
+
+@Controller
+public class UploadFileController {
+	
+	@Autowired
+	FileServices fileServices;
+	
+    @GetMapping("/")
+    public String index() {
+        return "multipartfile/uploadform.html";
+    }
+    
+    @PostMapping("/")
+    public String uploadMultipartFile(@RequestParam("uploadfile") MultipartFile file, Model model) {
+		try {
+			fileServices.store(file);
+			model.addAttribute("message", "File uploaded successfully!");
+		} catch (Exception e) {
+			model.addAttribute("message", "Fail! -> uploaded filename: " + file.getOriginalFilename());
+		}
+        return "multipartfile/uploadform.html";
+    }
+
+}

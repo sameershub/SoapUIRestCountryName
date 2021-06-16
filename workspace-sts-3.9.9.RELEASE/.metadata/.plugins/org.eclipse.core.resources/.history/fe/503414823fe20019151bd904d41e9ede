@@ -1,0 +1,123 @@
+package util;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import model.UserDetails;
+
+public class ExcelUtils {
+
+		public static ByteArrayInputStream usersToExcel(List<UserDetails> users) throws IOException {
+			String[] COLUMNs = {"Id", "First Name",	"Last Name", "Middle Name", "Password",	"Description", "Email",	"Phone Number",	"Start Date", "Status",	"TimeZone",	"Department", "UserName", "Roles",	"End Date"};
+			try(
+					Workbook workbook = new XSSFWorkbook();
+					ByteArrayOutputStream out = new ByteArrayOutputStream();
+			){
+				CreationHelper createHelper = workbook.getCreationHelper();
+		 
+				Sheet sheet = workbook.createSheet("UserUpload");
+		 
+				Font headerFont = workbook.createFont();
+				headerFont.setBold(true);
+				headerFont.setColor(IndexedColors.BLUE.getIndex());
+		 
+				CellStyle headerCellStyle = workbook.createCellStyle();
+				headerCellStyle.setFont(headerFont);
+		 
+				// Row for Header
+				Row headerRow = sheet.createRow(0);
+		 
+				// Header
+				for (int col = 0; col < COLUMNs.length; col++) {
+					Cell cell = headerRow.createCell(col);
+					cell.setCellValue(COLUMNs[col]);
+					cell.setCellStyle(headerCellStyle);
+				}
+		 
+				// CellStyle for Age
+				CellStyle ageCellStyle = workbook.createCellStyle();
+				ageCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("#"));
+		 
+				int rowIdx = 1;
+				for (UserDetails usr : users) {
+					Row row = sheet.createRow(rowIdx++);
+		 
+					row.createCell(0).setCellValue(usr.getCl);
+		 
+					Cell ageCell = row.createCell(3);
+					ageCell.setCellValue(customer.getAge());
+					ageCell.setCellStyle(ageCellStyle);
+				}
+		 
+				workbook.write(out);
+				return new ByteArrayInputStream(out.toByteArray());
+			}
+		}
+		
+		public static List<UserDetails> parseExcelFile(InputStream is) {
+			try {
+	    		Workbook workbook = new XSSFWorkbook(is);
+	     
+	    		Sheet sheet = workbook.getSheet("Users");
+	    		Iterator rows = sheet.iterator();
+	    		
+	    		List<UserDetails> lstUsers = new ArrayList<UserDetails>();
+	    		
+	    		int rowNumber = 0;
+	    		while (rows.hasNext()) {
+	    			Row currentRow = (Row) rows.next();
+	    			
+	    			// skip header
+	    			if(rowNumber == 0) {
+	    				rowNumber++;
+	    				continue;
+	    			}
+	    			
+	    			Iterator cellsInRow = currentRow.iterator();
+
+	    			UserDetails cust = new UserDetails();
+	    			
+	    			int cellIndex = 0;
+	    			while (cellsInRow.hasNext()) {
+	    				Cell currentCell = (Cell) cellsInRow.next();
+	    				
+	    				if(cellIndex==0) { // ID
+	    					cust.setId((long) currentCell.getNumericCellValue());
+	    				} else if(cellIndex==1) { // Name
+	    					cust.setName(currentCell.getStringCellValue());
+	    				} else if(cellIndex==2) { // Address
+	    					cust.setAddress(currentCell.getStringCellValue());
+	    				} else if(cellIndex==3) { // Age
+	    					cust.setAge((int) currentCell.getNumericCellValue());
+	    				}
+	    				
+	    				cellIndex++;
+	    			}
+	    			
+	    			lstCustomers.add(cust);
+	    		}
+	    		
+	    		// Close WorkBook
+	    		workbook.close();
+	    		
+	    		return lstCustomers;
+	        } catch (IOException e) {
+	        	throw new RuntimeException("FAIL! -> message = " + e.getMessage());
+	        }
+		}
+}

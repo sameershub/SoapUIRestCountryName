@@ -1,0 +1,9 @@
+package repositories;
+
+import org.springframework.data.repository.CrudRepository;
+
+import entities.Users;
+
+public interface userUpload extends CrudRepository<Users, Integer>{
+
+}

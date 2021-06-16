@@ -1,0 +1,12 @@
+package security;
+
+
+import org.springframework.stereotype.Component;
+
+public class BCryptPassword {
+	
+	public String encryptPassword(String password) { return BCrypt.hashpw(password, BCrypt.gensalt(12)); }
+	
+	public boolean validatePassword(String plaintext, String hashed) { return BCrypt.checkpw(plaintext, hashed); }
+
+}

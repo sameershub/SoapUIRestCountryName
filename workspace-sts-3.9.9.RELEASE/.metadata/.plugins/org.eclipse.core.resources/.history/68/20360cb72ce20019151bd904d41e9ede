@@ -1,0 +1,14 @@
+package com.data.upload;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+@ComponentScan ({"entities", "services", "repositories"})
+public class UploadApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(UploadApplication.class, args);
+	}
+
+}

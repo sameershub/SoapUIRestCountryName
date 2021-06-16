@@ -1,0 +1,31 @@
+package model;
+
+import java.util.Date;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+public class Users {
+	
+	@Entity
+	@Table(name="users_upload_staging")
+	public class Users {
+		
+		@Id
+		  private int id;
+		  private String userName;
+		  private String firstName;
+		  private String lastName;
+		  private String middleName;
+		  private String email;
+		  private String phoneNumber;
+		  private Date startDate;
+		  private Date endDate;
+		  private String timeZoneId;
+		  private String password;
+		  private String description;
+		  private String userRoles;
+		  private String userDepartment;
+		  private String status;
+
+}
